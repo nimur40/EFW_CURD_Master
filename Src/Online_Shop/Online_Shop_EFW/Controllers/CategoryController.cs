@@ -24,9 +24,22 @@ namespace Online_Shop_EFW.Controllers
         [HttpPost]
         public IActionResult Create(Category obj)
         {
-            _db.Categories.Add(obj);
-            _db.SaveChanges();
-            return RedirectToAction("Index","Category");
+            if(obj.Name==obj.DisplayOrder.ToString())
+            {
+                ModelState.AddModelError("name", "The Display cannot exactly math the name");
+            }
+            if (obj.Name.ToString()=="test")
+            {
+                ModelState.AddModelError("", "Test is an invalid value");
+            }
+            if ( ModelState.IsValid)
+            {
+                _db.Categories.Add(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index", "Category");
+            }
+            
+            return View(obj);
         }
     }
 }
